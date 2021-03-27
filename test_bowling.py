@@ -33,7 +33,7 @@ class BowlingScoreTest(unittest.TestCase):
         expected = (10+10+5) + (10+5+5) + (10+1) + 1+2 + 4
         self.assertEqual(score(result), expected)
 
-    def test_3_consecutive_strikes(self):
+    def test_3orMore_consecutive_strikes(self):
         result = 'XX XX XX 53'
         expected = (10+10+10) + (10+10+5) + (10+5+3) + 5+3
         self.assertEqual(score(result), expected)
