@@ -1,40 +1,29 @@
+def convert_str_scores_to_int(str_list):
+    int_scores = []
+    for i, value in enumerate(str_list):
+        if value == 'X':
+            value = 10
+        elif value == '/':
+            value = 10 - int(str_list[i-1])
+        elif value == '-':
+            value = 0
+        int_scores.append(int(value))
+    return int_scores
+
+
 def score(frames):
+    score_list = list(frames)
+    int_scores = convert_str_scores_to_int(score_list)
+
     total = 0
-    last_was_spare, last_was_strike = False, False
-    consecutive_strike = False
-
-    for roll1, roll2 in frames.split():
-        if last_was_spare:
-            total = total + int(roll1)
-            last_was_spare = False
-
-        if last_was_strike:
-            if roll2 == "X":
-                consecutive_strike = True  # another strike, continue
-            elif roll2 == "/":  # no more consecutive_strike but a spare
-                if consecutive_strike:  # previous bowl was a strike
-                    total += 10 + int(roll1)  # for first strike
-                    consecutive_strike = False
-                roll2score = 10 - int(roll1)  # convert / to number, keep var roll2 as '/'
-                total += int(roll1) + roll2score  # for second strike
-                last_was_strike = False
-            else:    # no more consecutive_strike
-                if consecutive_strike:  # previous bowl was a strike
-                    total += 10 + int(roll1)
-                    consecutive_strike = False
-                total += int(roll1) + int(roll2)
-                last_was_strike = False
-
-        if roll2 == '/':
-            total += 10
-            last_was_spare = True
-        elif roll2 == 'X':
-            total += 10
-            last_was_strike = True
+    for i, score in enumerate(score_list):
+        if score == '/':
+            total += int_scores[i] + int_scores[i+1]
+        elif score == 'X':
+            total += 10 + int_scores[i+1] + int_scores[i+2]
+        elif score == '-':
+            total += 0
         else:
-            total = total + int(roll1) + int(roll2)
+            total += int(score)
 
     return total
-
-
-# score('XX XX 5/ 12')
